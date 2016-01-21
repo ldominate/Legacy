@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Legacy.Data
@@ -10,6 +11,15 @@ namespace Legacy.Data
 		public AgentWorker(string connectionString)
 		{
 			_connection = new SqlConnection(connectionString);
+		}
+
+		public AdoNetWorker CreateWorker()
+		{
+			if (_connection.State == ConnectionState.Closed || _connection.State == ConnectionState.Broken)
+			{
+				_connection.Open();
+			}
+			return new AdoNetWorker(_connection.CreateCommand());
 		}
 
 		public void Dispose()

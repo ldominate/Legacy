@@ -42,6 +42,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -61,9 +62,19 @@
     <Compile Include="TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Legacy.Data\Legacy.Data.csproj">
+      <Project>{e41484e0-423e-46c3-91ed-78243978ec99}</Project>
+      <Name>Legacy.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Legacy.Domain\Legacy.Domain.csproj">
+      <Project>{fefb8679-6952-44a5-9758-11686609acf4}</Project>
+      <Name>Legacy.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
