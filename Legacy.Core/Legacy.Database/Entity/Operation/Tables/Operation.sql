@@ -4,6 +4,7 @@
 	[GroupId]	INT NULL,
 	[Type]		INT NOT NULL,
 	[Name]		NVARCHAR(255) NULL,
+	[IsDeleted]	BIT NOT NULL,
 
 	CONSTRAINT [PK_Operation] PRIMARY KEY CLUSTERED ([Id] ASC),
 	CONSTRAINT [FK_Operation_Group] FOREIGN KEY ([GroupId]) REFERENCES [Entity].[Operation](Id)

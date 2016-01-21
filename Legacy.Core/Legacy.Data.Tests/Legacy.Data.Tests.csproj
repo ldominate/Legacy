@@ -67,6 +67,7 @@
     <Compile Include="IoConfiguration\GeneratorModule.cs" />
     <Compile Include="IoConfiguration\ProviderInstanceTests.cs" />
     <Compile Include="IoConfiguration\ProviderModule.cs" />
+    <Compile Include="Operation\OperationProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBase.cs" />
   </ItemGroup>
@@ -84,9 +85,7 @@
       <Name>Legacy.Domain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Operation\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

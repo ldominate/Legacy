@@ -8,6 +8,11 @@
 			Success = true;
 		}
 
+		public ExecuteStatus(string errorMessage)
+		{
+			ErrorMessage = errorMessage;
+		}
+
 		/// <summary>Успешность исполнения</summary>
 		public bool Success { get; set; }
 
@@ -20,6 +25,11 @@
 	public class ExecuteStatus<TResult> : ExecuteStatus
 	{
 		public ExecuteStatus(TResult result)
+		{
+			Result = result;
+		}
+
+		public ExecuteStatus(TResult result, string errorMessage) : base(errorMessage) 
 		{
 			Result = result;
 		}

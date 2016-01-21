@@ -29,6 +29,18 @@ namespace Legacy.Data
 			return _command.ExecuteNonQuery();
 		}
 
+		/// <summary>Выполнить запрос к БД и вернуть значение первой строки первой колонки</summary>
+		/// <typeparam name="TScalar">Тип возвращаемого значения</typeparam>
+		/// <param name="query">Запрос</param>
+		/// <param name="parameters">Параметры</param>
+		/// <returns></returns>
+		public TScalar ExecScalarQuery<TScalar>(string query, params SqlParameter[] parameters)
+		{
+			ExecQuerySet(query, parameters);
+
+			return (TScalar) (_command.ExecuteScalar() ?? default(TScalar));
+		}
+
 		/// <summary>Выполняет запрос к БД и возвращает результат</summary>
 		/// <param name="query">Запрос</param>
 		/// <param name="parameters">Параметры</param>
