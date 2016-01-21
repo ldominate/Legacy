@@ -42,6 +42,8 @@
     <Compile Include="AdoNetWorker.cs" />
     <Compile Include="AgentWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProviderBase.cs" />
+    <Compile Include="SqlDataReaderAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />

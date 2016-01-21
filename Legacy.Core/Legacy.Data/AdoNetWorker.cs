@@ -33,11 +33,11 @@ namespace Legacy.Data
 		/// <param name="query">Запрос</param>
 		/// <param name="parameters">Параметры</param>
 		/// <returns></returns>
-		public SqlDataReader ExecSelectQuery(string query, params SqlParameter[] parameters)
+		public SqlDataReaderAdapter ExecSelectQuery(string query, params SqlParameter[] parameters)
 		{
 			ExecQuerySet(query, parameters);
 
-			return _command.ExecuteReader();
+			return new SqlDataReaderAdapter(_command.ExecuteReader());
 		}
 
 		/// <summary>Конфигурирует инструкцию SQL для выполнения запроса</summary>
@@ -46,7 +46,7 @@ namespace Legacy.Data
 		void ExecQuerySet(string query, params SqlParameter[] parameters)
 		{
 			_command.CommandType = CommandType.Text;
-			_command.CommandText = query;
+			_command.CommandText = query.Trim();
 			_command.Parameters.Clear();
 
 			if (parameters != null)

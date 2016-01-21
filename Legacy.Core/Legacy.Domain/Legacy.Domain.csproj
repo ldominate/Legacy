@@ -41,7 +41,10 @@
   <ItemGroup>
     <Compile Include="Common\BaseDomainByLogicDeleteObject.cs" />
     <Compile Include="Common\BaseDomainObject.cs" />
+    <Compile Include="Common\IProviderBase.cs" />
     <Compile Include="Common\IWorker.cs" />
+    <Compile Include="Operations\Operation.cs" />
+    <Compile Include="Operations\OperationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
