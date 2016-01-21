@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FEFB8679-6952-44A5-9758-11686609ACF4}</ProjectGuid>
+    <ProjectGuid>{E41484E0-423E-46C3-91ED-78243978EC99}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Legacy.Domain</RootNamespace>
-    <AssemblyName>Legacy.Domain</AssemblyName>
+    <RootNamespace>Legacy.Data</RootNamespace>
+    <AssemblyName>Legacy.Data</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,10 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\BaseDomainByLogicDeleteObject.cs" />
-    <Compile Include="Common\BaseDomainObject.cs" />
-    <Compile Include="Common\IWorker.cs" />
+    <Compile Include="AgentWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

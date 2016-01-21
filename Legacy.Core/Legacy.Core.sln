@@ -5,6 +5,17 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Legacy.Domain", "Legacy.Domain\Legacy.Domain.csproj", "{FEFB8679-6952-44A5-9758-11686609ACF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Legacy.Data", "Legacy.Data\Legacy.Data.csproj", "{E41484E0-423E-46C3-91ED-78243978EC99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Legacy.Data.Tests", "Legacy.Data.Tests\Legacy.Data.Tests.csproj", "{258B6F1B-7711-4134-A8CA-D12E4243F498}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A82EC72D-CB58-4337-9201-842ACBD93952}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +26,14 @@ Global
 		{FEFB8679-6952-44A5-9758-11686609ACF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEFB8679-6952-44A5-9758-11686609ACF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEFB8679-6952-44A5-9758-11686609ACF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E41484E0-423E-46C3-91ED-78243978EC99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E41484E0-423E-46C3-91ED-78243978EC99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E41484E0-423E-46C3-91ED-78243978EC99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E41484E0-423E-46C3-91ED-78243978EC99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{258B6F1B-7711-4134-A8CA-D12E4243F498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{258B6F1B-7711-4134-A8CA-D12E4243F498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{258B6F1B-7711-4134-A8CA-D12E4243F498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{258B6F1B-7711-4134-A8CA-D12E4243F498}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
