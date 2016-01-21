@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Legacy.Domain.Common;
 
 namespace Legacy.Domain.Operations
@@ -15,9 +16,10 @@ namespace Legacy.Domain.Operations
 		public OperationType Type { get; set; }
 
 		/// <summary>Идентификатор группы</summary>
-		public int GroupID { get; set; }
+		public int? GroupId { get; set; }
 
 		/// <summary>Наименование</summary>
+		[Required, StringLength(255)]
 		public string Name { get; set; }
 
 		public ICollection<Operation> Operations { get; set; }
