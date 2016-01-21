@@ -12,6 +12,8 @@ namespace Legacy.Data
 			_reader = reader;
 		}
 
+		public SqlDataReader Reader { get { return _reader; } }
+
 		public TType GetQueryValue<TType>(string column, TType defaultValue = default(TType))
 		{
 			try

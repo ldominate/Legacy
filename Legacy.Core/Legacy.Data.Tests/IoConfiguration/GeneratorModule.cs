@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Legacy.Data.Tests.Operations;
 using Ploeh.AutoFixture;
 using StringGenerator = Legacy.Data.Tests.Generators.StringGenerator;
 
@@ -15,6 +16,8 @@ namespace Legacy.Data.Tests.IoConfiguration
 			builder.RegisterTypes(
 				typeof(StringGenerator))
 				.SingleInstance();
+
+			builder.RegisterType<OperationGenerator>().SingleInstance();
 		}
 	}
 }
