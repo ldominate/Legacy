@@ -22,6 +22,7 @@ namespace Legacy.Domain.Operations
 		[Required, StringLength(255)]
 		public string Name { get; set; }
 
+		/// <summary>Дочерние элементы</summary>
 		public ICollection<Operation> Operations { get; set; }
 	}
 }
