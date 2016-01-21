@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="AdoNetWorker.cs" />
     <Compile Include="AgentWorker.cs" />
+    <Compile Include="Operations\OperationProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderBase.cs" />
     <Compile Include="SqlDataReaderAdapter.cs" />

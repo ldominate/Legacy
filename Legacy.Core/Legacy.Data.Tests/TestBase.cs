@@ -28,6 +28,7 @@ namespace Legacy.Data.Tests
 				.SingleInstance();
 
 			builder.RegisterModule<ProviderModule>();
+			builder.RegisterModule<GeneratorModule>();
 
 			Container = builder.Build();
 		}

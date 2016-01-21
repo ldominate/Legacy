@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Legacy.Data.Operations;
+using Legacy.Domain.Operations;
 
 namespace Legacy.Data.Tests.IoConfiguration
 {
@@ -8,7 +10,7 @@ namespace Legacy.Data.Tests.IoConfiguration
 		{
 			base.Load(builder);
 
-
+			builder.RegisterType<OperationProvider>().As<IOperationProvider>();
 		}
 	}
 }
