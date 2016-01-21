@@ -7,7 +7,7 @@ namespace Legacy.Data
 	{
 		private readonly AdoNetWorker _worker;
 
-		public ProviderBase(AdoNetWorker worker)
+		protected ProviderBase(AdoNetWorker worker)
 		{
 			_worker = worker;
 		}

@@ -44,6 +44,7 @@
     <Compile Include="Common\BaseDomainObject.cs" />
     <Compile Include="Common\IProviderBase.cs" />
     <Compile Include="Common\IWorker.cs" />
+    <Compile Include="Common\Range.cs" />
     <Compile Include="Operations\IOperationProvider.cs" />
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\OperationType.cs" />
