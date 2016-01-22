@@ -10,6 +10,9 @@ namespace Legacy.Data.Operations
 {
 	public class OperationProvider : ProviderBase, IOperationProvider
 	{
+		private const string ShemaName = "[Entity]";
+		private const string TableName = "[Operation]";
+
 		private readonly AdoNetWorker _worker;
 
 		public OperationProvider(AdoNetWorker worker) : base(worker)
@@ -36,7 +39,8 @@ namespace Legacy.Data.Operations
 		{
 			try
 			{	//Добавление записи запросом
-				operation.Id = _worker.ExecScalarQuery<int>("INSERT INTO [Entity].[Operation] ([Type], [GroupId], [Name]) OUTPUT inserted.Id AS Id VALUES(@Type, @GroupId, @Name)",
+				operation.Id = _worker.ExecScalarQuery<int>(
+					string.Format("INSERT INTO {0}.{1} ([Type], [GroupId], [Name]) OUTPUT inserted.Id AS Id VALUES(@Type, @GroupId, @Name)", ShemaName, TableName),
 					CreateParameters(operation).ToArray());
 
 				return new ExecuteStatus<int>(operation.Id);
@@ -78,7 +82,21 @@ namespace Legacy.Data.Operations
 
 		public ExecuteStatus ForceDelete(int id)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				if (_worker.ExecCrudQuery(
+					string.Format("DELETE FROM {0}.{1} WHERE [Id] = @Id", ShemaName, TableName), new SqlParameter("@Id", id)) > 0)
+				{
+					return new ExecuteStatus();
+				}
+				return new ExecuteStatus {Success = false};
+			}
+			catch (Exception ex)
+			{
+				_worker.Rollback();
+
+				return new ExecuteStatus<int>(-1, ex.Message);
+			}
 		}
 
 		public ExecuteStatus<Operation> GetById(int id)

@@ -108,10 +108,14 @@ namespace Legacy.Data.Tests.Operations
 		[TestMethod]
 		public void UpdateGetShouldBeEqual()
 		{
-			foreach (var operation in SetTestListOperations().Reverse())
+			var operations = SetTestListOperations().ToArray();
+
+			foreach (var operation in operations.Reverse())
 			{
 				Provider.Update(Modify(operation));
-
+			}
+			foreach (var operation in operations.OrderBy(o => o.Name))
+			{
 				var result = Provider.GetById(operation.Id);
 
 				Assert.IsNotNull(result);
@@ -120,7 +124,37 @@ namespace Legacy.Data.Tests.Operations
 				var comparisonResult = CreateCompareLogic().Compare(operation, result.Result);
 				Assert.IsTrue(comparisonResult.AreEqual, comparisonResult.DifferencesString);
 			}
+		}
 
+		[TestMethod]
+		public void ForceDeleteShouldBeResultSuccess()
+		{
+			foreach (var operation in SetTestListOperations().Reverse())
+			{
+				var result = Provider.ForceDelete(operation.Id);
+
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success, result.ErrorMessage);
+			}
+		}
+
+		[TestMethod]
+		public void ForceDeleteShouldBeRealDelete()
+		{
+			var operations = SetTestListOperations().ToArray();
+
+			foreach (var operation in operations.Reverse())
+			{
+				Provider.ForceDelete(operation.Id);
+			}
+			foreach (var operation in operations.OrderBy(o => o.Name))
+			{
+				var result = Provider.GetById(operation.Id);
+
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success, result.ErrorMessage);
+				Assert.IsNull(result.Result);
+			}
 		}
 	}
 }
