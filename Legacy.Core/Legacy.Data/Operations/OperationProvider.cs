@@ -35,6 +35,19 @@ namespace Legacy.Data.Operations
 			return @params;
 		}
 
+		public Operation Create(SqlDataReaderAdapter aReader)
+		{
+			return new Operation
+			{
+				Id = aReader.GetQueryValue("Id", -1),
+				GroupId = aReader.GetQueryValue<int?>("GroupId"),
+				Type = aReader.GetQueryValue("Type", OperationType.Item),
+				Name = aReader.GetQueryValue<string>("Name"),
+				Order = aReader.GetQueryValue("Order", 0),
+				IsDeleted = aReader.GetQueryValue("IsDeleted", false)
+			};
+		}
+
 		public ExecuteStatus<int> Add(Operation operation)
 		{
 			try
@@ -109,14 +122,7 @@ namespace Legacy.Data.Operations
 
 					if (aReader.Reader.Read())
 					{
-						operation = new Operation
-						{
-							Id = aReader.GetQueryValue("Id", -1),
-							GroupId = aReader.GetQueryValue<int?>("GroupId"),
-							Type = aReader.GetQueryValue("Type", OperationType.Item),
-							Name = aReader.GetQueryValue<string>("Name"),
-							IsDeleted = aReader.GetQueryValue("IsDeleted", false)
-						};
+						operation = Create(aReader);
 					}
 					return new ExecuteStatus<Operation>(operation);
 				}
