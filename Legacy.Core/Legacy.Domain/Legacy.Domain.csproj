@@ -45,6 +45,11 @@
     <Compile Include="Common\IProviderBase.cs" />
     <Compile Include="Common\IWorker.cs" />
     <Compile Include="Common\Range.cs" />
+    <Compile Include="Common\Requests\IListLogicRequest.cs" />
+    <Compile Include="Common\Requests\IListPagedRequest.cs" />
+    <Compile Include="Common\Requests\IListRequest.cs" />
+    <Compile Include="Common\Requests\ListLogicRequestBase.cs" />
+    <Compile Include="Common\SortingOrdered.cs" />
     <Compile Include="Operations\IOperationProvider.cs" />
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\OperationType.cs" />
