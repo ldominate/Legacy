@@ -2,7 +2,7 @@
 (
 	[Id]		INT IDENTITY(1, 1) NOT NULL,
 	[GroupId]	INT NULL,
-	[Type]		INT NOT NULL,
+	[Type]		INT NOT NULL DEFAULT 0,
 	[Name]		NVARCHAR(255) NULL,
 	[IsDeleted]	BIT NOT NULL DEFAULT 0,
 

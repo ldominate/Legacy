@@ -62,9 +62,11 @@
     <Folder Include="Entity" />
     <Folder Include="Entity\Operation" />
     <Folder Include="Entity\Operation\Tables" />
+    <Folder Include="Entity\Operation\Stored Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\Entity.sql" />
     <Build Include="Entity\Operation\Tables\Operation.sql" />
+    <Build Include="Entity\Operation\Stored Procedures\UpdateOperation.sql" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 using System.Linq;
 using Autofac;
 using KellermanSoftware.CompareNetObjects;
+using Legacy.Data.Tests.Generators;
 using Legacy.Domain.Operations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,6 +11,34 @@ namespace Legacy.Data.Tests.Operations
 	[TestClass]
 	public class OperationProviderTests : TestBase
 	{
+		protected IOperationProvider Provider;
+
+		[TestInitialize]
+		public void Start()
+		{
+			Provider = Container.Resolve<IOperationProvider>();
+		}
+
+		protected Operation Modify(Operation operation)
+		{
+			operation.Name = Container.Resolve<StringGenerator>().GenerateCyrillicWords();
+
+			return operation;
+		}
+
+		protected IEnumerable<Operation> SetTestListOperations()
+		{
+			foreach (var operation in Container.Resolve<OperationGenerator>().GenerateCollection())
+			{
+				var result = Provider.Add(operation);
+
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success, result.ErrorMessage);
+
+				yield return operation;
+			}
+		}
+
 		protected virtual ICompareLogic CreateCompareLogic()
 		{
 			return new CompareLogic(new ComparisonConfig
@@ -25,11 +54,9 @@ namespace Legacy.Data.Tests.Operations
 		[TestMethod]
 		public void AddShouldBeResultSuccess()
 		{
-			var provider = Container.Resolve<IOperationProvider>();
-
 			foreach (var operation in Container.Resolve<OperationGenerator>().GenerateCollection())
 			{
-				var result = provider.Add(operation);
+				var result = Provider.Add(operation);
 
 				Assert.IsNotNull(result);
 				Assert.IsTrue(result.Success, result.ErrorMessage);
@@ -43,7 +70,7 @@ namespace Legacy.Data.Tests.Operations
 
 			foreach (var operation in Container.Resolve<OperationGenerator>().GenerateCollection())
 			{
-				var result = provider.Add(operation);
+				var result = Provider.Add(operation);
 
 				Assert.IsNotNull(result);
 				Assert.IsTrue(result.Success, result.ErrorMessage);
@@ -52,23 +79,11 @@ namespace Legacy.Data.Tests.Operations
 		}
 
 		[TestMethod]
-		public void AddGetOperationShouldBeEqual()
+		public void AddGetShouldBeEqual()
 		{
-			var provider = Container.Resolve<IOperationProvider>();
-
-			var operations = Container.Resolve<OperationGenerator>().GenerateCollection().ToArray();
-
-			foreach (var operation in operations)
+			foreach (var operation in SetTestListOperations().Reverse())
 			{
-				var result = provider.Add(operation);
-
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success, result.ErrorMessage);
-			}
-
-			foreach (var operation in operations.Reverse())
-			{
-				var result = provider.GetById(operation.Id);
+				var result = Provider.GetById(operation.Id);
 
 				Assert.IsNotNull(result);
 				Assert.IsTrue(result.Success, result.ErrorMessage);
@@ -76,6 +91,36 @@ namespace Legacy.Data.Tests.Operations
 				var comparisonResult = CreateCompareLogic().Compare(operation, result.Result);
 				Assert.IsTrue(comparisonResult.AreEqual, comparisonResult.DifferencesString);
 			}
+		}
+
+		[TestMethod]
+		public void UpdateShouldBeResultSuccess()
+		{
+			foreach (var operation in SetTestListOperations().Reverse())
+			{
+				var result = Provider.Update(Modify(operation));
+
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success, result.ErrorMessage);
+			}
+		}
+
+		[TestMethod]
+		public void UpdateGetShouldBeEqual()
+		{
+			foreach (var operation in SetTestListOperations().Reverse())
+			{
+				Provider.Update(Modify(operation));
+
+				var result = Provider.GetById(operation.Id);
+
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success, result.ErrorMessage);
+
+				var comparisonResult = CreateCompareLogic().Compare(operation, result.Result);
+				Assert.IsTrue(comparisonResult.AreEqual, comparisonResult.DifferencesString);
+			}
+
 		}
 	}
 }

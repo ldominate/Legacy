@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Legacy.Domain.Common;
 
 namespace Legacy.Data
@@ -52,6 +53,17 @@ namespace Legacy.Data
 			return new SqlDataReaderAdapter(_command.ExecuteReader());
 		}
 
+		/// <summary>Выполняет указанную хранимую процедуру в БД</summary>
+		/// <param name="name">Наименование хранимой процедуры</param>
+		/// <param name="parameters">Параметры</param>
+		/// <returns>Задействованных в инструкции строк</returns>
+		public int ExecProcNonReader(string name, params SqlParameter[] parameters)
+		{
+			ExecProcSet(name, parameters);
+
+			return _command.ExecuteNonQuery();
+		}
+
 		/// <summary>Конфигурирует инструкцию SQL для выполнения запроса</summary>
 		/// <param name="query">Запрос</param>
 		/// <param name="parameters">Параметры</param>
@@ -64,6 +76,31 @@ namespace Legacy.Data
 			if (parameters != null)
 			{
 				_command.Parameters.AddRange(parameters);
+			}
+		}
+
+		/// <summary>Конфигурирует инструкцию SQL для выполнения хранимой процедуры</summary>
+		/// <param name="name">Наименование хранимой процедуры</param>
+		/// <param name="parameters">Параметры</param>
+		void ExecProcSet(string name, params SqlParameter[] parameters)
+		{
+			_command.CommandType = CommandType.StoredProcedure;
+			_command.CommandText = name.Trim();
+			_command.Parameters.Clear();
+
+			if (parameters != null)
+			{
+				foreach (var parameter in parameters.Where(parameter => parameter != null))
+				{
+					if (parameter.SqlDbType == SqlDbType.Structured)
+					{
+						_command.Parameters.AddWithValue(parameter.ParameterName, parameter.Value);
+					}
+					else
+					{
+						_command.Parameters.Add(parameter);
+					}
+				}
 			}
 		}
 
