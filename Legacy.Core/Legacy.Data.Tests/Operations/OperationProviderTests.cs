@@ -13,6 +13,8 @@ namespace Legacy.Data.Tests.Operations
 	{
 		protected IOperationProvider Provider;
 
+		public TestContext TestContext { get; set; }
+
 		[TestInitialize]
 		public void Start()
 		{
@@ -154,6 +156,44 @@ namespace Legacy.Data.Tests.Operations
 				Assert.IsNotNull(result);
 				Assert.IsTrue(result.Success, result.ErrorMessage);
 				Assert.IsNull(result.Result);
+			}
+		}
+
+		[TestMethod]
+		public void MaxOrderShouldBeResultSuccess()
+		{
+			var operationGenerator = Container.Resolve<OperationGenerator>();
+
+			var i = 0;
+			var root = operationGenerator.Generate();
+			root.Operations = operationGenerator.GenerateCollection().Select(o => { o.Order = i++; return o; }).ToArray();
+
+			Provider.Add(root);
+
+			root.SetParentByChilds();
+
+			foreach (var result in root.Operations.Reverse().Select(operation => Provider.Add(operation)))
+			{
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success, result.ErrorMessage);
+			}
+
+			foreach (var operation in root.Operations.OrderBy(o => o.Name))
+			{
+				if (operation.GroupId.HasValue)
+				{
+					var result = Provider.MaxOrder(operation.GroupId.Value);
+
+					Assert.IsNotNull(result);
+					Assert.IsTrue(result.Success, result.ErrorMessage);
+					Assert.IsTrue(result.Result <= i, "MaxOrder:{0}", result.Result);
+
+					TestContext.WriteLine("Id:\t{0}\tOrder:\t{1}\tMaxOrder:\t{2}", operation.Id, operation.Order, result.Result);
+				}
+				else
+				{
+					TestContext.WriteLine("GroupId is null. Id: {0}", operation.Id);
+				}
 			}
 		}
 	}

@@ -35,5 +35,10 @@ namespace Legacy.Domain.Operations
 		/// <param name="id">Идентификатор услуги</param>
 		/// <returns>Номенклатура услуг</returns>
 		ExecuteStatus<Operation> GetById(int id);
+
+		/// <summary>Возвращает максимальный индекс сортировки для заданной группы</summary>
+		/// <param name="groupId">Идентификатор группы</param>
+		/// <returns>Максимальный индекс сортировки</returns>
+		ExecuteStatus<int> MaxOrder(int groupId);
 	}
 }

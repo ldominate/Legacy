@@ -27,5 +27,14 @@ namespace Legacy.Domain.Operations
 
 		/// <summary>Дочерние элементы</summary>
 		public ICollection<Operation> Operations { get; set; }
+
+		public Operation SetParentByChilds()
+		{
+			foreach (var child in Operations)
+			{
+				child.GroupId = Id;
+			}
+			return this;
+		}
 	}
 }

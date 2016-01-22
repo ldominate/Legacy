@@ -53,8 +53,8 @@ namespace Legacy.Data.Operations
 			try
 			{	//Добавление записи запросом
 				operation.Id = _worker.ExecScalarQuery<int>(
-					string.Format("INSERT INTO {0}.{1} ([Type], [GroupId], [Name]) OUTPUT inserted.Id AS Id VALUES(@Type, @GroupId, @Name)", ShemaName, TableName),
-					CreateParameters(operation).ToArray());
+					string.Format("INSERT INTO {0}.{1} ([Type], [GroupId], [Name], [Order]) OUTPUT inserted.Id AS Id VALUES(@Type, @GroupId, @Name, @Order)", ShemaName, TableName),
+					CreateParameters(operation, new SqlParameter("@Order", operation.Order)).ToArray());
 
 				return new ExecuteStatus<int>(operation.Id);
 			}
@@ -116,7 +116,7 @@ namespace Legacy.Data.Operations
 		{
 			try
 			{
-				using (var aReader = _worker.ExecSelectQuery("SELECT TOP 1 * FROM [Entity].[Operation] WHERE [Id] = @Id", new SqlParameter("@Id", id)))
+				using (var aReader = _worker.ExecSelectQuery(string.Format("SELECT TOP 1 * FROM {0}.{1} WHERE [Id] = @Id", ShemaName, TableName), new SqlParameter("@Id", id)))
 				{
 					Operation operation = null;
 
@@ -132,6 +132,22 @@ namespace Legacy.Data.Operations
 				_worker.Rollback();
 
 				return new ExecuteStatus<Operation>(null, ex.Message);
+			}
+		}
+
+		public ExecuteStatus<int> MaxOrder(int groupId)
+		{
+			try
+			{
+				return new ExecuteStatus<int>(
+					_worker.ExecScalarQuery<int>(string.Format("SELECT MAX([Order]) FROM {0}.{1} WHERE [GroupId] = @GroupId GROUP BY [GroupId]", ShemaName, TableName),
+					new SqlParameter("@GroupId", groupId)));
+			}
+			catch (Exception ex)
+			{
+				_worker.Rollback();
+
+				return new ExecuteStatus<int>(0, ex.Message);
 			}
 		}
 	}
