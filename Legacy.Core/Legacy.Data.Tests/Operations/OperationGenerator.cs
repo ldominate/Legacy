@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Legacy.Data.Tests.Generators;
 using Legacy.Domain.Operations;
 using Ploeh.AutoFixture;
 using StringGenerator = Legacy.Data.Tests.Generators.StringGenerator;
 
 namespace Legacy.Data.Tests.Operations
 {
-	public class OperationGenerator
+	public class OperationGenerator : GeneratorBase
 	{
 		private readonly Fixture _fixture;
 		private readonly StringGenerator _stringGenerator;

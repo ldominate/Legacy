@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using KellermanSoftware.CompareNetObjects;
@@ -28,10 +29,20 @@ namespace Legacy.Data.Tests.Operations
 			return operation;
 		}
 
-		protected IEnumerable<Operation> SetTestListOperations()
+		/// <summary></summary>
+		/// <param name="parent">С Id из БД</param>
+		/// <param name="length">Длинна случайной последовательности</param>
+		/// <returns></returns>
+		protected IEnumerable<Operation> SetTestListOperations(Operation parent = null, int length = 9)
 		{
-			foreach (var operation in Container.Resolve<OperationGenerator>().GenerateCollection())
+			var i = 0;
+			foreach (var operation in Container.Resolve<OperationGenerator>().GenerateCollection(length))
 			{
+				operation.Order = i++;
+				if (parent != null)
+				{
+					operation.GroupId = parent.Id;
+				}
 				var result = Provider.Add(operation);
 
 				Assert.IsNotNull(result);
@@ -39,6 +50,17 @@ namespace Legacy.Data.Tests.Operations
 
 				yield return operation;
 			}
+		}
+
+		protected IEnumerable<Operation> SetTreeListTestOperation(int lenRoot = 5)
+		{
+			var rnd = new Random();
+
+			return SetTestListOperations(null, lenRoot).Select(r =>
+			{
+				r.Operations = SetTestListOperations(r, rnd.Next(3, 9)).ToArray();
+				return r;
+			});
 		}
 
 		protected virtual ICompareLogic CreateCompareLogic()
@@ -222,19 +244,13 @@ namespace Legacy.Data.Tests.Operations
 		{
 			var operationGenerator = Container.Resolve<OperationGenerator>();
 
-			var i = 0;
 			var root = operationGenerator.Generate();
-			root.Operations = operationGenerator.GenerateCollection().Select(o => { o.Order = i++; return o; }).ToArray();
 
 			Provider.Add(root);
 
-			root.SetParentByChilds();
+			root.Operations = SetTestListOperations(root).ToArray();
 
-			foreach (var result in root.Operations.Reverse().Select(operation => Provider.Add(operation)))
-			{
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success, result.ErrorMessage);
-			}
+			var maxOrder = root.Operations.Max(o => o.Order);
 
 			foreach (var operation in root.Operations.OrderBy(o => o.Name))
 			{
@@ -244,7 +260,7 @@ namespace Legacy.Data.Tests.Operations
 
 					Assert.IsNotNull(result);
 					Assert.IsTrue(result.Success, result.ErrorMessage);
-					Assert.IsTrue(result.Result <= i, "MaxOrder:{0}", result.Result);
+					Assert.IsTrue(result.Result <= maxOrder, "MaxOrder:{0}", result.Result);
 
 					TestContext.WriteLine("Id:\t{0}\tOrder:\t{1}\tMaxOrder:\t{2}", operation.Id, operation.Order, result.Result);
 				}
@@ -253,6 +269,19 @@ namespace Legacy.Data.Tests.Operations
 					TestContext.WriteLine("GroupId is null. Id: {0}", operation.Id);
 				}
 			}
+		}
+
+		[TestMethod]
+		public void GetListShouldBeResultSuccess()
+		{
+			var tree = SetTreeListTestOperation();
+
+			var result = Provider.GetList(new OperationListRequest {GroupId = tree.ElementAt(2).Id});
+
+			Assert.IsNotNull(result);
+			Assert.IsTrue(result.Success, result.ErrorMessage);
+			Assert.IsNotNull(result.Result);
+			Assert.IsTrue(result.Result.Any());
 		}
 	}
 }

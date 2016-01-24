@@ -1,4 +1,7 @@
-﻿namespace Legacy.Domain.Results
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace Legacy.Domain.Results
 {
 	/// <summary>Данные о результате исполнения операции</summary>
 	public class ExecuteStatus
@@ -36,5 +39,25 @@
 
 		/// <summary>Данные исполнения</summary>
 		public TResult Result { get; set; }
+	}
+
+	/// <summary>Расширение класса результата исполнения с последоватвельностью данных</summary>
+	/// <typeparam name="TResult">Тип данных исполнения</typeparam>
+	public class ExecuteStatusList<TResult> : ExecuteStatus<TResult>
+		where TResult : IEnumerable
+	{
+		public ExecuteStatusList(int allCount, TResult result) : base(result)
+		{
+			AllCount = allCount;
+		}
+
+		public ExecuteStatusList(TResult result, string errorMessage)
+			: base(result, errorMessage)
+		{
+			
+		}
+
+		/// <summary>Общее количество элементов без учёта параметров навигации по последовательности</summary>
+		public int AllCount { get; set; }
 	}
 }

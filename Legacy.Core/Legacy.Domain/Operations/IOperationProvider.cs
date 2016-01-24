@@ -40,7 +40,7 @@ namespace Legacy.Domain.Operations
 		/// <summary>Получить последовательность элементов из БД по заданным параметрам запроса</summary>
 		/// <param name="request">Запрос</param>
 		/// <returns>Результат запроса с последовательностью услуг</returns>
-		ExecuteStatus<IEnumerable<Operation>> GetList(OperationListRequest request);
+		ExecuteStatusList<IEnumerable<Operation>> GetList(OperationListRequest request);
 
 			/// <summary>Возвращает максимальный индекс сортировки для заданной группы</summary>
 		/// <param name="groupId">Идентификатор группы</param>

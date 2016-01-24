@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using Legacy.Domain.Common;
 using Legacy.Domain.Operations;
 using Legacy.Domain.Results;
 
@@ -155,9 +156,44 @@ namespace Legacy.Data.Operations
 			}
 		}
 
-		public ExecuteStatus<IEnumerable<Operation>> GetList(OperationListRequest request)
+		public ExecuteStatusList<IEnumerable<Operation>> GetList(OperationListRequest request)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				using (var aReader = _worker.ExecProcReader("[Entity].[GetListOperation]",
+					new SqlParameter("@startIndex", request.StartIndex),
+					new SqlParameter("@count", request.Count),
+					request.GroupId.HasValue ? new SqlParameter("@GroupId", request.GroupId.Value) : null,
+					request.Type.HasValue ? new SqlParameter("@Type", request.Type.Value) : null,
+					string.IsNullOrWhiteSpace(request.Name) ? null : new SqlParameter("@Name", string.Format("%{0}%", request.Name)),
+					new SqlParameter("@Order", (request.Order == SortingOrdered.Desc)),
+					new SqlParameter("@PropertySort", request.PropertySort)))
+				{
+					if (!aReader.Reader.Read())
+					{
+						return new ExecuteStatusList<IEnumerable<Operation>>(null, "No selected data");
+					}
+					var exStat = new ExecuteStatusList<IEnumerable<Operation>>(aReader.GetQueryValue("allCount", 0), null);
+
+					if (aReader.Reader.NextResult())
+					{
+						var operations = new List<Operation>();
+
+						while (aReader.Reader.Read())
+						{
+							operations.Add(Create(aReader));
+						}
+						exStat.Result = operations;
+					}
+					return exStat;
+				}
+			}
+			catch (Exception ex)
+			{
+				_worker.Rollback();
+
+				return new ExecuteStatusList<IEnumerable<Operation>>(null, ex.Message);
+			}
 		}
 
 		public ExecuteStatus<int> MaxOrder(int groupId)
