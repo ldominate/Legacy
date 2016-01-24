@@ -85,12 +85,32 @@ namespace Legacy.Data.Operations
 
 		public ExecuteStatus LogicDelete(int id)
 		{
-			throw new NotImplementedException();
+			return ChangeIsDeleted(id);
 		}
 
 		public ExecuteStatus LogicRecovery(int id)
 		{
-			throw new NotImplementedException();
+			return ChangeIsDeleted(id, false);
+		}
+
+		public ExecuteStatus ChangeIsDeleted(int id, bool isDeleted = true)
+		{
+			try
+			{
+				if (_worker.ExecCrudQuery(
+					string.Format("UPDATE {0}.{1} SET [IsDeleted] = @IsDeleted WHERE [Id] = @Id", ShemaName, TableName),
+					new SqlParameter("@Id", id), new SqlParameter("@IsDeleted", isDeleted)) > 0)
+				{
+					return new ExecuteStatus();
+				}
+				return new ExecuteStatus { Success = false };
+			}
+			catch (Exception ex)
+			{
+				_worker.Rollback();
+
+				return new ExecuteStatus<int>(-1, ex.Message);
+			}
 		}
 
 		public ExecuteStatus ForceDelete(int id)
@@ -133,6 +153,11 @@ namespace Legacy.Data.Operations
 
 				return new ExecuteStatus<Operation>(null, ex.Message);
 			}
+		}
+
+		public ExecuteStatus<IEnumerable<Operation>> GetList(OperationListRequest request)
+		{
+			throw new NotImplementedException();
 		}
 
 		public ExecuteStatus<int> MaxOrder(int groupId)

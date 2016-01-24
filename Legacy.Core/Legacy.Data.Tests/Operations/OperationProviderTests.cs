@@ -129,6 +129,64 @@ namespace Legacy.Data.Tests.Operations
 		}
 
 		[TestMethod]
+		public void LogicDeleteShouldBeResultSuccess()
+		{
+			foreach (var operation in SetTestListOperations().Reverse())
+			{
+				var result = Provider.LogicDelete(operation.Id);
+
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success, result.ErrorMessage);
+			}
+		}
+
+		[TestMethod]
+		public void LogicDeleteGetShouldBeIsDeleted()
+		{
+			var operations = SetTestListOperations().Reverse().Select(o => { Provider.LogicDelete(o.Id); return o; }).ToArray();
+
+			foreach (var operation in operations)
+			{
+				var result = Provider.GetById(operation.Id);
+
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success, result.ErrorMessage);
+				Assert.IsNotNull(result.Result);
+				Assert.IsTrue(result.Result.IsDeleted);
+			}
+		}
+
+		[TestMethod]
+		public void LogicRecoveryShouldBeResultSuccess()
+		{
+			var operations = SetTestListOperations().Reverse().Select(o => { Provider.LogicDelete(o.Id); return o; }).ToArray();
+
+			foreach (var operation in operations.OrderBy(o => o.Name))
+			{
+				var result = Provider.LogicRecovery(operation.Id);
+
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success, result.ErrorMessage);
+			}
+		}
+
+		[TestMethod]
+		public void LogicRecoveryGetShouldBeIsDeleted()
+		{
+			var operations = SetTestListOperations().Reverse().Select(o => { Provider.LogicDelete(o.Id); return o; }).Select(o => { Provider.LogicRecovery(o.Id); return o; }).ToArray();
+
+			foreach (var operation in operations.OrderBy(o => o.Name))
+			{
+				var result = Provider.GetById(operation.Id);
+
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success, result.ErrorMessage);
+				Assert.IsNotNull(result.Result);
+				Assert.IsFalse(result.Result.IsDeleted);
+			}
+		}
+
+		[TestMethod]
 		public void ForceDeleteShouldBeResultSuccess()
 		{
 			foreach (var operation in SetTestListOperations().Reverse())

@@ -68,5 +68,6 @@
     <Build Include="Security\Entity.sql" />
     <Build Include="Entity\Operation\Tables\Operation.sql" />
     <Build Include="Entity\Operation\Stored Procedures\UpdateOperation.sql" />
+    <Build Include="Entity\Operation\Stored Procedures\GetListOperation.sql" />
   </ItemGroup>
 </Project>

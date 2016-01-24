@@ -64,6 +64,17 @@ namespace Legacy.Data
 			return _command.ExecuteNonQuery();
 		}
 
+		/// <summary>Выполняет указанную хранимую процедуру в БД и возвращает результат</summary>
+		/// <param name="name">Наименование хранимой процедуры</param>
+		/// <param name="parameters">Параметры</param>
+		/// <returns>Результат исполнения хранимой процедуры</returns>
+		public SqlDataReaderAdapter ExecProcReader(string name, params SqlParameter[] parameters)
+		{
+			ExecProcSet(name, parameters);
+
+			return new SqlDataReaderAdapter(_command.ExecuteReader());
+		}
+
 		/// <summary>Конфигурирует инструкцию SQL для выполнения запроса</summary>
 		/// <param name="query">Запрос</param>
 		/// <param name="parameters">Параметры</param>

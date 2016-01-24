@@ -52,6 +52,7 @@
     <Compile Include="Common\SortingOrdered.cs" />
     <Compile Include="Operations\IOperationProvider.cs" />
     <Compile Include="Operations\Operation.cs" />
+    <Compile Include="Operations\OperationListRequest.cs" />
     <Compile Include="Operations\OperationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\ExecuteStatus.cs" />
