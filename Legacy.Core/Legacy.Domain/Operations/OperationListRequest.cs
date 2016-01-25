@@ -8,6 +8,8 @@ namespace Legacy.Domain.Operations
 		public OperationListRequest()
 		{
 			PropertySort = "Name";
+
+			Type = OperationType.Group;
 		}
 
 		public OperationType? Type { get; set; }

@@ -6,7 +6,10 @@
 		/// <summary>Группа</summary>
 		Group = 0,
 
+		/// <summary>Подгруппа</summary>
+		Subgroup = 1,
+
 		/// <summary>Элемент</summary>
-		Item = 1
+		Item = 2
 	}
 }

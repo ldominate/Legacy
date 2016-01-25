@@ -42,6 +42,11 @@ namespace Legacy.Data.Tests.Operations
 				if (parent != null)
 				{
 					operation.GroupId = parent.Id;
+					operation.Type = OperationType.Item;
+				}
+				else
+				{
+					operation.Type = OperationType.Group;
 				}
 				var result = Provider.Add(operation);
 
@@ -282,6 +287,30 @@ namespace Legacy.Data.Tests.Operations
 			Assert.IsTrue(result.Success, result.ErrorMessage);
 			Assert.IsNotNull(result.Result);
 			Assert.IsTrue(result.Result.Any());
+		}
+
+		[TestMethod]
+		public void GetListByDefaultRequestShouldBeResultSuccess()
+		{
+			var tree = SetTreeListTestOperation().ToArray();
+
+			var result = Provider.GetList(new OperationListRequest());
+
+			Assert.IsNotNull(result);
+			Assert.IsTrue(result.Success, result.ErrorMessage);
+			Assert.IsNotNull(result.Result);
+			Assert.IsTrue(result.Result.Any());
+			Assert.IsTrue(tree.Length == result.Result.Count(), "Length sequences not equal, src:{0} dst:{1}", tree.Length, result.Result.Count());
+
+			foreach (var operation in tree.OrderBy(o => o.Name))
+			{
+				var resultDb = result.Result.FirstOrDefault(o => o.Id == operation.Id);
+
+				Assert.IsNotNull(resultDb);
+
+				var comparisonResult = CreateCompareLogic().Compare(operation, resultDb);
+				Assert.IsTrue(comparisonResult.AreEqual, comparisonResult.DifferencesString);
+			}
 		}
 	}
 }
