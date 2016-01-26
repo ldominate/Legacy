@@ -1,10 +1,43 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section styles
+{
+	@Styles.Render("~/site/sgtreetable")
+}
+@section fscripts
+{
+	@Scripts.Render("~/site/jgtreetanle")
+<script type="text/javascript">
+	// <![CDATA[
+	$(function () {
+		//$('#gtreetable').gtreetable({
+		//	'source': function (id) {
+		//		return {
+		//			type: 'GET',
+		//			url: 'nodeChildren',
+		//			data: { 'id': id },
+		//			dataType: 'json',
+		//			error: function (XMLHttpRequest) {
+		//				alert(XMLHttpRequest.status + ': ' + XMLHttpRequest.responseText);
+		//			}
+		//		}
+		//	},
+		//	'language': 'ru'
+		//});
+	});
+	// ]]>
+</script>
+}
 <h1>Bootstrap starter template</h1>
 <p class="lead">
 	Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.
 </p>
+<div class="alert alert-danger" role="alert">
+	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	<span class="sr-only">Error:</span>
+	Enter a valid email address
+</div>
+<table class="table gtreetable" id="gtreetable"><thead><tr><th>Category</th></tr></thead></table>
