@@ -43,6 +43,7 @@ namespace Legacy.Data.Tests.Operations
 				{
 					operation.GroupId = parent.Id;
 					operation.Type = OperationType.Item;
+					operation.Level = parent.Level + 1;
 				}
 				else
 				{
@@ -279,9 +280,9 @@ namespace Legacy.Data.Tests.Operations
 		[TestMethod]
 		public void GetListShouldBeResultSuccess()
 		{
-			var tree = SetTreeListTestOperation();
+			var tree = SetTreeListTestOperation().ToArray();
 
-			var result = Provider.GetList(new OperationListRequest {GroupId = tree.ElementAt(2).Id});
+			var result = Provider.GetList(new OperationListRequest {GroupId = tree.ElementAt(2).Id, Type = null});
 
 			Assert.IsNotNull(result);
 			Assert.IsTrue(result.Success, result.ErrorMessage);
@@ -300,7 +301,7 @@ namespace Legacy.Data.Tests.Operations
 			Assert.IsTrue(result.Success, result.ErrorMessage);
 			Assert.IsNotNull(result.Result);
 			Assert.IsTrue(result.Result.Any());
-			Assert.IsTrue(tree.Length == result.Result.Count(), "Length sequences not equal, src:{0} dst:{1}", tree.Length, result.Result.Count());
+			Assert.IsTrue(tree.Length <= result.Result.Count(), "Length sequences not equal, src:{0} dst:{1}", tree.Length, result.Result.Count());
 
 			foreach (var operation in tree.OrderBy(o => o.Name))
 			{

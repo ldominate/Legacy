@@ -28,15 +28,17 @@ BEGIN
 	ORDER BY
 	CASE WHEN @Order = 1 THEN
 		CASE LOWER(@PropertySort)
-			WHEN 'name'	THEN CAST([Name] AS sql_variant)
-			WHEN 'type'	THEN CAST([Type] AS sql_variant)
+			WHEN 'name'		THEN CAST([Name] AS sql_variant)
+			WHEN 'type'		THEN CAST([Type] AS sql_variant)
+			WHEN 'order'	THEN CAST([Order] AS sql_variant)
 						ELSE CAST([Name] AS sql_variant)
 		END
 	END DESC,
 	CASE WHEN @Order = 0 THEN
 		CASE LOWER(@PropertySort)
-			WHEN 'name'	THEN CAST([Name] AS sql_variant)
-			WHEN 'type'	THEN CAST([Type] AS sql_variant)
+			WHEN 'name'		THEN CAST([Name] AS sql_variant)
+			WHEN 'type'		THEN CAST([Type] AS sql_variant)
+			WHEN 'order'	THEN CAST([Order] AS sql_variant)
 						ELSE CAST([Name] AS sql_variant)
 		END
 	END ASC
