@@ -43,6 +43,7 @@ namespace Legacy.Data.Operations
 				Id = aReader.GetQueryValue("Id", -1),
 				GroupId = aReader.GetQueryValue<int?>("GroupId"),
 				Type = aReader.GetQueryValue("Type", OperationType.Item),
+				Level = aReader.GetQueryValue("Level", 0),
 				Name = aReader.GetQueryValue<string>("Name"),
 				Order = aReader.GetQueryValue("Order", 0),
 				IsDeleted = aReader.GetQueryValue("IsDeleted", false)
@@ -54,8 +55,8 @@ namespace Legacy.Data.Operations
 			try
 			{	//Добавление записи запросом
 				operation.Id = _worker.ExecScalarQuery<int>(
-					string.Format("INSERT INTO {0}.{1} ([Type], [GroupId], [Name], [Order]) OUTPUT inserted.Id AS Id VALUES(@Type, @GroupId, @Name, @Order)", ShemaName, TableName),
-					CreateParameters(operation, new SqlParameter("@Order", operation.Order)).ToArray());
+					string.Format("INSERT INTO {0}.{1} ([Type], [GroupId], [Level], [Name], [Order]) OUTPUT inserted.Id AS Id VALUES(@Type, @GroupId, @Level, @Name, @Order)", ShemaName, TableName),
+					CreateParameters(operation, new SqlParameter("@Level", operation.Level), new SqlParameter("@Order", operation.Order)).ToArray());
 
 				return new ExecuteStatus<int>(operation.Id);
 			}

@@ -1,0 +1,37 @@
+﻿@{
+	ViewBag.Title = "Operation";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles
+{
+	@Styles.Render("~/site/sgtreetable")
+}
+@section fscripts
+{
+	@Scripts.Render("~/site/jgtreetanle")
+	<script type="text/javascript">
+	// <![CDATA[
+	$(function () {
+		$('#gtreetable').gtreetable({
+			'source': function (id) {
+				return {
+					type: 'GET',
+					url: 'operation/nodes',
+					data: { 'id': id },
+					dataType: 'json',
+					error: function (XMLHttpRequest) {
+						alert(XMLHttpRequest.status + ': ' + XMLHttpRequest.responseText);
+					}
+				}
+			},
+			'language': 'ru'
+		});
+	});
+	// ]]>
+	</script>
+}
+
+<div class="jumbotron">
+	<h1></h1>
+</div>
+<table class="table gtreetable" id="gtreetable"><thead><tr><th>Operation</th></tr></thead></table>

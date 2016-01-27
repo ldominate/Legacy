@@ -3,34 +3,6 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section styles
-{
-	@Styles.Render("~/site/sgtreetable")
-}
-@section fscripts
-{
-	@Scripts.Render("~/site/jgtreetanle")
-<script type="text/javascript">
-	// <![CDATA[
-	$(function () {
-		//$('#gtreetable').gtreetable({
-		//	'source': function (id) {
-		//		return {
-		//			type: 'GET',
-		//			url: 'nodeChildren',
-		//			data: { 'id': id },
-		//			dataType: 'json',
-		//			error: function (XMLHttpRequest) {
-		//				alert(XMLHttpRequest.status + ': ' + XMLHttpRequest.responseText);
-		//			}
-		//		}
-		//	},
-		//	'language': 'ru'
-		//});
-	});
-	// ]]>
-</script>
-}
 <h1>Bootstrap starter template</h1>
 <p class="lead">
 	Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.
@@ -40,4 +12,8 @@
 	<span class="sr-only">Error:</span>
 	Enter a valid email address
 </div>
-<table class="table gtreetable" id="gtreetable"><thead><tr><th>Category</th></tr></thead></table>
+<div class="jumbotron">
+	<h1>Hello, world!</h1>
+	<p>...</p>
+	<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+</div>

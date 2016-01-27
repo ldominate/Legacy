@@ -24,6 +24,7 @@ namespace Legacy.Data.Tests.Operations
 				.Without(o => o.Id)
 				.Without(o => o.IsDeleted)
 				.Without(o => o.GroupId)
+				.Without(o => o.Level)
 				.Without(o => o.Order)
 				.Without(o => o.Operations)
 				.Create();

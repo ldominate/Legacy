@@ -7,7 +7,7 @@ namespace Legacy.Domain.Operations
 	{
 		public OperationListRequest()
 		{
-			PropertySort = "Name";
+			PropertySort = "Order";
 
 			Type = OperationType.Group;
 		}

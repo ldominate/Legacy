@@ -18,6 +18,9 @@ namespace Legacy.Domain.Operations
 		/// <summary>Идентификатор группы</summary>
 		public int? GroupId { get; set; }
 
+		/// <summary>Обозначает уровень вложенности услуги</summary>
+		public int Level { get; set; }
+
 		/// <summary>Наименование</summary>
 		[Required, StringLength(255)]
 		public string Name { get; set; }
