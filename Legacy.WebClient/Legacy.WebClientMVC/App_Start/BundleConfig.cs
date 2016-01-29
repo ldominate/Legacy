@@ -53,6 +53,12 @@ namespace Legacy.WebClientMVC
 			jqBundle.Orderer = nullOrderer;
 			bundles.Add(jqBundle);
 
+			var jqUiBundel = new CustomScriptBundle("~/site/jqUi");
+			jqUiBundel.Include("~/content/js/jq/ui/jquery-ui-{version}.js", "~/content/js/jq/browser/jquery.browser.js");
+			jqUiBundel.Transforms.Add(jsTransformer);
+			jqUiBundel.Orderer = nullOrderer;
+			bundles.Add(jqUiBundel);
+
 			var jBtBundle = new CustomScriptBundle("~/site/jbootstrap");
 			jBtBundle.Include("~/content/js/bootstrap/bootstrap.js",
 				"~/content/js/ie10-viewport-bug-workaround.js");

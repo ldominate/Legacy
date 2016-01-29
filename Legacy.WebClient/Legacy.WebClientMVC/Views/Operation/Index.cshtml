@@ -8,26 +8,61 @@
 }
 @section fscripts
 {
-	@Scripts.Render("~/site/jgtreetanle")
+	@Scripts.Render("~/site/jgtreetanle", "~/site/jqUi")
 	<script type="text/javascript">
-	// <![CDATA[
-	$(function () {
-		$('#gtreetable').gtreetable({
-			'source': function (id) {
-				return {
-					type: 'GET',
-					url: 'operation/nodes',
-					data: { 'id': id },
-					dataType: 'json',
-					error: function (XMLHttpRequest) {
-						alert(XMLHttpRequest.status + ': ' + XMLHttpRequest.responseText);
+		// <![CDATA[
+		$(function() {
+			var modal = $("#message-box");
+			var errorHandler = function(xmlHttpRequest) {
+				modal.find(".modal-title").html(xmlHttpRequest.status);
+				modal.find(".modal-body").html(xmlHttpRequest.responseText);
+				modal.modal("show");
+			};
+			$("#gtreetable").gtreetable({
+				"source": function(id) {
+					return {
+						type: "GET",
+						url: "@Url.Action("Nodes")",
+						data: id > 0 ? { "id": id } : {},
+						dataType: "json",
+						error: errorHandler
 					}
-				}
-			},
-			'language': 'ru'
+				},
+				"sort": function(a, b) {
+					return a.Order > b.Order;
+				},
+				"onSave": function(node) {
+					return {
+						type: "POST",
+						url: !node.isSaved() ? "@Url.Action("Add")" : "",
+						data: {
+							parent: node.getParent(),
+							name: node.getName(),
+							position: node.getInsertPosition(),
+							related: node.getRelatedNodeId()
+						},
+						dataType: "json",
+						error: errorHandler
+					};
+				},
+				'onMove': function(oSource, oDestination, position) {
+					return {
+						type: 'POST',
+						url: 'nodeMove?id=',
+						data: {
+							related: oDestination.getId(),
+							position: position
+						},
+						dataType: 'json',
+						error: errorHandler
+					}
+				},
+				"manyroots": true,
+				"language": "ru",
+				"draggable": true
+			});
 		});
-	});
-	// ]]>
+		// ]]>
 	</script>
 }
 
@@ -35,3 +70,20 @@
 	<h1></h1>
 </div>
 <table class="table gtreetable" id="gtreetable"><thead><tr><th>Operation</th></tr></thead></table>
+
+<div id="message-box" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Request status</h4>
+			</div>
+			<div class="modal-body">
+				<p>One fine body&hellip;</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
