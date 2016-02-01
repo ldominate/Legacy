@@ -51,5 +51,10 @@ namespace Legacy.Domain.Operations
 		/// <param name="operation">Номенклатура услуг</param>
 		/// <returns>Результат запроса</returns>
 		ExecuteStatus SetOrder(Operation operation);
+
+		/// <summary>Перемещает указанную услугу на другой уроветь</summary>
+		/// <param name="operation">Номенклатура услуг</param>
+		/// <returns>Результат запроса</returns>
+		ExecuteStatus SetLevel(Operation operation);
 	}
 }

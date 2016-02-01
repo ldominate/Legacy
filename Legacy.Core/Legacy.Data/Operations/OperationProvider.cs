@@ -119,8 +119,7 @@ namespace Legacy.Data.Operations
 		{
 			try
 			{
-				if (_worker.ExecCrudQuery(
-					string.Format("DELETE FROM {0}.{1} WHERE [Id] = @Id", ShemaName, TableName), new SqlParameter("@Id", id)) > 0)
+				if (_worker.ExecProcNonReader("[Entity].[DeleteOperation]", new SqlParameter("@Id", id)) > 0)
 				{
 					return new ExecuteStatus();
 				}
@@ -219,6 +218,25 @@ namespace Legacy.Data.Operations
 			{
 				_worker.ExecCrudQuery(string.Format("UPDATE {0}.{1} SET [Order] = @Order WHERE [Id] = @Id", ShemaName, TableName),
 					new SqlParameter("@Id", operation.Id),
+					new SqlParameter("@Order", operation.Order));
+				return new ExecuteStatus();
+			}
+			catch (Exception ex)
+			{
+				_worker.Rollback();
+
+				return new ExecuteStatus<int>(0, ex.Message);
+			}
+		}
+
+		public ExecuteStatus SetLevel(Operation operation)
+		{
+			try
+			{
+				_worker.ExecCrudQuery(string.Format("UPDATE {0}.{1} SET [GroupId] = @GroupId, [Level] = @Level, [Order] = @Order WHERE [Id] = @Id", ShemaName, TableName),
+					new SqlParameter("@Id", operation.Id),
+					new SqlParameter("@GroupId", operation.GroupId),
+					new SqlParameter("@Level", operation.Level),
 					new SqlParameter("@Order", operation.Order));
 				return new ExecuteStatus();
 			}

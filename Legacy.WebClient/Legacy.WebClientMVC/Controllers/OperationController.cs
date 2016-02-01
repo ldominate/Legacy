@@ -134,9 +134,18 @@ namespace Legacy.WebClientMVC.Controllers
 			}
 			var operation = getResult.Result;
 
+			var getRelatedResult = _operationProvider.GetById(move.related);
+
+			if (!getResult.Success || getResult.Result == null)
+			{
+				Response.StatusCode = (int)HttpStatusCode.BadRequest;
+				return Json(getRelatedResult.ErrorMessage);
+			}
+			var related = getRelatedResult.Result;
+
 			if (move.position.Contains("before") || move.position.Contains("after"))
 			{
-				var listResult = _operationProvider.GetList(new OperationListRequest {GroupId = operation.GroupId, IsDelete = false});
+				var listResult = _operationProvider.GetList(new OperationListRequest { GroupId = related.GroupId, IsDelete = false });
 
 				if (!listResult.Success)
 				{
@@ -156,13 +165,9 @@ namespace Legacy.WebClientMVC.Controllers
 							{
 								operation.Order = order++;
 
-								var setResult = _operationProvider.SetOrder(operation);
-
-								if (!setResult.Success) break;
-
 								item.Order = order++;
 
-								setResult = _operationProvider.SetOrder(item);
+								var setResult = _operationProvider.SetOrder(item);
 
 								if (!setResult.Success) break;
 							}
@@ -170,16 +175,14 @@ namespace Legacy.WebClientMVC.Controllers
 							{
 								item.Order = order++;
 
+								operation.Order = order++;
+
 								var setResult = _operationProvider.SetOrder(item);
 
 								if (!setResult.Success) break;
-
-								operation.Order = order++;
-
-								setResult = _operationProvider.SetOrder(operation);
-
-								if (!setResult.Success) break;
 							}
+							operation.GroupId = item.GroupId;
+							operation.Level = item.Level;
 						}
 						else
 						{
@@ -189,13 +192,41 @@ namespace Legacy.WebClientMVC.Controllers
 
 							if (!setResult.Success) break;
 						}
+					}
+					var setLevelResult = _operationProvider.SetLevel(operation);
 
+					if (!setLevelResult.Success)
+					{
+						Response.StatusCode = (int)HttpStatusCode.BadRequest;
+						return Json(setLevelResult.ErrorMessage);
 					}
 				}
-				return Json(new Node(operation){related = move.related});
+				return Json(new Node(operation));
 			}
+			if (move.position.Contains("lastChild"))
+			{
+				var maxOrderResult = _operationProvider.MaxOrder(operation.GroupId ?? 0);
 
-			return Json(true);
+				if (!maxOrderResult.Success)
+				{
+					Response.StatusCode = (int)HttpStatusCode.BadRequest;
+					return Json(maxOrderResult.ErrorMessage);
+				}
+				operation.Order = maxOrderResult.Result;
+
+				operation.GroupId = related.Id;
+
+				operation.Level = related.Level + 1;
+
+				var setLevelResult = _operationProvider.SetLevel(operation);
+
+				if (!setLevelResult.Success)
+				{
+					Response.StatusCode = (int)HttpStatusCode.BadRequest;
+					return Json(setLevelResult.ErrorMessage);
+				}
+			}
+			return Json(new Node(operation));
 		}
 
 	}
