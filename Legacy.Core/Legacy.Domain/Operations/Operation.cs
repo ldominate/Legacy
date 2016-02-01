@@ -39,5 +39,10 @@ namespace Legacy.Domain.Operations
 			}
 			return this;
 		}
+
+		public override string ToString()
+		{
+			return Name;
+		}
 	}
 }

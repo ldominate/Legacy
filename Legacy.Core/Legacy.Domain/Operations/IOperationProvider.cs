@@ -42,9 +42,14 @@ namespace Legacy.Domain.Operations
 		/// <returns>Результат запроса с последовательностью услуг</returns>
 		ExecuteStatusList<IEnumerable<Operation>> GetList(OperationListRequest request);
 
-			/// <summary>Возвращает максимальный индекс сортировки для заданной группы</summary>
+		/// <summary>Возвращает максимальный индекс сортировки для заданной группы</summary>
 		/// <param name="groupId">Идентификатор группы</param>
 		/// <returns>Максимальный индекс сортировки</returns>
 		ExecuteStatus<int> MaxOrder(int groupId);
+
+		/// <summary>Задаёт порядок сортировки по указанному идентификатору услуги</summary>
+		/// <param name="operation">Номенклатура услуг</param>
+		/// <returns>Результат запроса</returns>
+		ExecuteStatus SetOrder(Operation operation);
 	}
 }

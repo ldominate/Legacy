@@ -271,6 +271,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\Operation\MoveRequest.cs" />
     <Compile Include="ViewModels\Operation\Node.cs" />
   </ItemGroup>
   <ItemGroup>

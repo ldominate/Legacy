@@ -313,5 +313,24 @@ namespace Legacy.Data.Tests.Operations
 				Assert.IsTrue(comparisonResult.AreEqual, comparisonResult.DifferencesString);
 			}
 		}
+
+		[TestMethod]
+		public void SetOrderShouldBeResultSuccess()
+		{
+			var tree = SetTreeListTestOperation().ToArray();
+
+			foreach (var operation in tree)
+			{
+				var random = new Random();
+
+				operation.Order = random.Next(0, 244);
+
+				var result = Provider.SetOrder(operation);
+
+				Assert.IsNotNull(result);
+
+				Assert.IsTrue(result.Success);
+			}
+		}
 	}
 }

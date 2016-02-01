@@ -212,5 +212,22 @@ namespace Legacy.Data.Operations
 				return new ExecuteStatus<int>(0, ex.Message);
 			}
 		}
+
+		public ExecuteStatus SetOrder(Operation operation)
+		{
+			try
+			{
+				_worker.ExecCrudQuery(string.Format("UPDATE {0}.{1} SET [Order] = @Order WHERE [Id] = @Id", ShemaName, TableName),
+					new SqlParameter("@Id", operation.Id),
+					new SqlParameter("@Order", operation.Order));
+				return new ExecuteStatus();
+			}
+			catch (Exception ex)
+			{
+				_worker.Rollback();
+
+				return new ExecuteStatus<int>(0, ex.Message);
+			}
+		}
 	}
 }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Legacy.Domain.Operations;
@@ -102,27 +104,98 @@ namespace Legacy.WebClientMVC.Controllers
 		[HttpPost, Route("delete")]
 		public JsonResult Delete(int id)
 		{
-			if (ModelState.IsValid)
-			{
-				var getResult = _operationProvider.GetById(id);
+			var getResult = _operationProvider.GetById(id);
 
-				if (!getResult.Success || getResult.Result == null)
+			if (!getResult.Success || getResult.Result == null)
+			{
+				Response.StatusCode = (int)HttpStatusCode.BadRequest;
+				return Json(getResult.ErrorMessage);
+			}
+
+			var deleteResult = _operationProvider.ForceDelete(id);
+
+			if (!deleteResult.Success)
+			{
+				Response.StatusCode = (int)HttpStatusCode.BadRequest;
+				return Json(deleteResult.ErrorMessage);
+			}
+			return Json(deleteResult.Success);
+		}
+
+		[HttpPost, Route("move")]
+		public JsonResult Move(MoveRequest move)
+		{
+			var getResult = _operationProvider.GetById(move.id);
+
+			if (!getResult.Success || getResult.Result == null)
+			{
+				Response.StatusCode = (int)HttpStatusCode.BadRequest;
+				return Json(getResult.ErrorMessage);
+			}
+			var operation = getResult.Result;
+
+			if (move.position.Contains("before") || move.position.Contains("after"))
+			{
+				var listResult = _operationProvider.GetList(new OperationListRequest {GroupId = operation.GroupId, IsDelete = false});
+
+				if (!listResult.Success)
 				{
 					Response.StatusCode = (int)HttpStatusCode.BadRequest;
 					return Json(getResult.ErrorMessage);
 				}
-
-				var deleteResult = _operationProvider.ForceDelete(id);
-
-				if (!deleteResult.Success)
+				if (listResult.AllCount > 0)
 				{
-					Response.StatusCode = (int)HttpStatusCode.BadRequest;
-					return Json(deleteResult.ErrorMessage);
+					var order = 0;
+					foreach (var item in listResult.Result)
+					{
+						if(item.Id == operation.Id) continue;
+
+						if (item.Id == move.related)
+						{
+							if (move.position.Contains("before"))
+							{
+								operation.Order = order++;
+
+								var setResult = _operationProvider.SetOrder(operation);
+
+								if (!setResult.Success) break;
+
+								item.Order = order++;
+
+								setResult = _operationProvider.SetOrder(item);
+
+								if (!setResult.Success) break;
+							}
+							else if (move.position.Contains("after"))
+							{
+								item.Order = order++;
+
+								var setResult = _operationProvider.SetOrder(item);
+
+								if (!setResult.Success) break;
+
+								operation.Order = order++;
+
+								setResult = _operationProvider.SetOrder(operation);
+
+								if (!setResult.Success) break;
+							}
+						}
+						else
+						{
+							item.Order = order++;
+
+							var setResult = _operationProvider.SetOrder(item);
+
+							if (!setResult.Success) break;
+						}
+
+					}
 				}
-				return Json(deleteResult.Success);
+				return Json(new Node(operation){related = move.related});
 			}
-			Response.StatusCode = (int)HttpStatusCode.BadRequest;
-			return Json(ModelState.ToString());
+
+			return Json(true);
 		}
 
 	}

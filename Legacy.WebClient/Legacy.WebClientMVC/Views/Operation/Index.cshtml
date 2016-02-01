@@ -39,7 +39,6 @@
 							id: node.getId(),
 							parent: node.getParent(),
 							name: node.getName(),
-							move: node.getMovePosition(),
 							position: node.getInsertPosition(),
 							related: node.getRelatedNodeId()
 						},
@@ -56,21 +55,23 @@
 						error: errorHandler
 					};
 				},
-				'onMove': function(oSource, oDestination, position) {
+				"onMove": function(source, destination, position) {
 					return {
-						type: 'POST',
-						url: 'nodeMove?id=',
+						type: "POST",
+						url: "@Url.Action("Move")",
 						data: {
-							related: oDestination.getId(),
+							id: source.getId(),
+							related: destination.getId(),
 							position: position
 						},
-						dataType: 'json',
+						dataType: "json",
 						error: errorHandler
 					}
 				},
 				"manyroots": true,
 				"language": "ru",
-				"draggable": true
+				"draggable": true,
+				"showExpandIconOnEmpty" : false
 			});
 		});
 		// ]]>

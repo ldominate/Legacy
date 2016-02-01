@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web.Script.Serialization;
 using Legacy.Domain.Operations;
 
 namespace Legacy.WebClientMVC.ViewModels.Operation
@@ -21,6 +22,7 @@ namespace Legacy.WebClientMVC.ViewModels.Operation
 
 		public int id { get; set; }
 
+		[ScriptIgnore]
 		public int parent { get; set; }
 
 		[Required, StringLength(255)]
@@ -30,12 +32,13 @@ namespace Legacy.WebClientMVC.ViewModels.Operation
 
 		public string type { get; set; }
 
-		public int move { get; set; }
-
+		[ScriptIgnore]
 		public string position { get; set; }
 
+		[ScriptIgnore]
 		public int related { get; set; }
 
+		[ScriptIgnore]
 		public Domain.Operations.Operation Operation
 		{
 			get
