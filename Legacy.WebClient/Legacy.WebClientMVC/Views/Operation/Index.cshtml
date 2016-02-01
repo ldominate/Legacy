@@ -31,16 +31,27 @@
 				"sort": function(a, b) {
 					return a.Order > b.Order;
 				},
-				"onSave": function(node) {
+				"onSave": function (node) {
 					return {
 						type: "POST",
-						url: !node.isSaved() ? "@Url.Action("Add")" : "",
+						url: !node.isSaved() ? "@Url.Action("Add")" : "@Url.Action("Update")",
 						data: {
+							id: node.getId(),
 							parent: node.getParent(),
 							name: node.getName(),
+							move: node.getMovePosition(),
 							position: node.getInsertPosition(),
 							related: node.getRelatedNodeId()
 						},
+						dataType: "json",
+						error: errorHandler
+					};
+				},
+				"onDelete":function(node) {
+					return {
+						type: "POST",
+						url: "@Url.Action("Delete")",
+						data: {id: node.getId()},
 						dataType: "json",
 						error: errorHandler
 					};

@@ -15,14 +15,14 @@ BEGIN
 	SELECT COUNT(*) AS allCount
 	FROM [Entity].[Operation]
 	WHERE (@IsDeleted IS NULL OR [IsDeleted] = @IsDeleted)
-		AND (@GroupId IS NULL OR ISNULL([GroupId], 0) = @GroupId)
+		AND ((@GroupId IS NULL AND [GroupId] IS NULL) OR [GroupId] = @GroupId)
 		AND (@Type IS NULL OR ISNULL([Type], 0) = @Type)
 		AND (@Name IS NULL OR [Name] LIKE @Name)
 
 	SELECT *
 	FROM [Entity].[Operation]
 	WHERE (@IsDeleted IS NULL OR [IsDeleted] = @IsDeleted)
-		AND (@GroupId IS NULL OR ISNULL([GroupId], 0) = @GroupId)
+		AND ((@GroupId IS NULL AND [GroupId] IS NULL) OR [GroupId] = @GroupId)
 		AND (@Type IS NULL OR ISNULL([Type], 0) = @Type)
 		AND (@Name IS NULL OR [Name] LIKE @Name)
 	ORDER BY

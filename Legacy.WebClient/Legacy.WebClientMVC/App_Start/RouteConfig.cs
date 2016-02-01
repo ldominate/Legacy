@@ -9,16 +9,18 @@ namespace Legacy.WebClientMVC
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			routes.MapRoute("OperationMain", "operation", new {controller = "Operation", action = "Index"});
-			routes.MapRoute("OperationNodes", "operation/nodes", new { controller = "Operation", action = "Nodes" });
-			routes.MapRoute("OperationAdd", "operation/add", new { controller = "Operation", action = "Add" });
+			routes.MapMvcAttributeRoutes();
+
+//			routes.MapRoute("OperationMain", "operation", new {controller = "Operation", action = "Index"});
+//			routes.MapRoute("OperationNodes", "operation/nodes", new { controller = "Operation", action = "Nodes" });
+//			routes.MapRoute("OperationAdd", "operation/add", new { controller = "Operation", action = "Add" });
 
 			routes.MapRoute(
 				name: "Default",
 				url: "{controller}/{action}/{id}",
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
 			);
-
+			
 		}
 	}
 }

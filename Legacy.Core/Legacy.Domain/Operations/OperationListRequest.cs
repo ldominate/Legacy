@@ -9,7 +9,7 @@ namespace Legacy.Domain.Operations
 		{
 			PropertySort = "Order";
 
-			Type = OperationType.Group;
+			Type = null;
 		}
 
 		public OperationType? Type { get; set; }

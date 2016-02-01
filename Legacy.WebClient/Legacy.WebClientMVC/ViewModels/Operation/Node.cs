@@ -30,6 +30,8 @@ namespace Legacy.WebClientMVC.ViewModels.Operation
 
 		public string type { get; set; }
 
+		public int move { get; set; }
+
 		public string position { get; set; }
 
 		public int related { get; set; }
