@@ -235,7 +235,7 @@ namespace Legacy.Data.Operations
 			{
 				_worker.ExecCrudQuery(string.Format("UPDATE {0}.{1} SET [GroupId] = @GroupId, [Level] = @Level, [Order] = @Order WHERE [Id] = @Id", ShemaName, TableName),
 					new SqlParameter("@Id", operation.Id),
-					new SqlParameter("@GroupId", operation.GroupId),
+					new SqlParameter("@GroupId", SqlDbType.Int) { Value = (object)operation.GroupId ?? DBNull.Value },
 					new SqlParameter("@Level", operation.Level),
 					new SqlParameter("@Order", operation.Order));
 				return new ExecuteStatus();

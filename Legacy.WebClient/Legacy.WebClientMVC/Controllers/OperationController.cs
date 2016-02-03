@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Legacy.Domain.Operations;
@@ -166,44 +164,34 @@ namespace Legacy.WebClientMVC.Controllers
 								operation.Order = order++;
 
 								item.Order = order++;
-
-								var setResult = _operationProvider.SetOrder(item);
-
-								if (!setResult.Success) break;
 							}
 							else if (move.position.Contains("after"))
 							{
 								item.Order = order++;
 
 								operation.Order = order++;
-
-								var setResult = _operationProvider.SetOrder(item);
-
-								if (!setResult.Success) break;
 							}
 							operation.GroupId = item.GroupId;
+
 							operation.Level = item.Level;
 						}
 						else
 						{
+							if (item.Order == order)
+							{
+								order++;
+
+								continue;
+							}
 							item.Order = order++;
-
-							var setResult = _operationProvider.SetOrder(item);
-
-							if (!setResult.Success) break;
 						}
-					}
-					var setLevelResult = _operationProvider.SetLevel(operation);
+						var setResult = _operationProvider.SetOrder(item);
 
-					if (!setLevelResult.Success)
-					{
-						Response.StatusCode = (int)HttpStatusCode.BadRequest;
-						return Json(setLevelResult.ErrorMessage);
+						if (!setResult.Success) break;
 					}
 				}
-				return Json(new Node(operation));
 			}
-			if (move.position.Contains("lastChild"))
+			else if (move.position.Contains("lastChild"))
 			{
 				var maxOrderResult = _operationProvider.MaxOrder(operation.GroupId ?? 0);
 
@@ -217,14 +205,17 @@ namespace Legacy.WebClientMVC.Controllers
 				operation.GroupId = related.Id;
 
 				operation.Level = related.Level + 1;
+			}
+			else
+			{
+				return Json(new Node(operation));
+			}
+			var setLevelResult = _operationProvider.SetLevel(operation);
 
-				var setLevelResult = _operationProvider.SetLevel(operation);
-
-				if (!setLevelResult.Success)
-				{
-					Response.StatusCode = (int)HttpStatusCode.BadRequest;
-					return Json(setLevelResult.ErrorMessage);
-				}
+			if (!setLevelResult.Success)
+			{
+				Response.StatusCode = (int)HttpStatusCode.BadRequest;
+				return Json(setLevelResult.ErrorMessage);
 			}
 			return Json(new Node(operation));
 		}
