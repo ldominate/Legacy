@@ -47,6 +47,13 @@ namespace Legacy.WebClientMVC
 			sGtBundle.Orderer = nullOrderer;
 			bundles.Add(sGtBundle);
 
+			var sFancyTree = new CustomStyleBundle("~/site/sfancytree");
+			sFancyTree.Include("~/content/css/fancytree/skin-bootstrap/ui.fancytree.css");
+			sFancyTree.Transforms.Add(styleTransformer);
+			sFancyTree.Builder = nullBuilder;
+			sFancyTree.Orderer = nullOrderer;
+			bundles.Add(sFancyTree);
+
 			var jqBundle = new CustomScriptBundle("~/site/jq");
 			jqBundle.Include("~/content/js/jq/jquery-{version}.js");
 			jqBundle.Transforms.Add(jsTransformer);
@@ -73,6 +80,24 @@ namespace Legacy.WebClientMVC
 			jGtBundle.Orderer = nullOrderer;
 			bundles.Add(jGtBundle);
 
+			var jqCkBundle = new CustomScriptBundle("~/site/jqCookie");
+			jqCkBundle.Include("~/content/js/jq/cookie/jquery.cookie-{version}.js");
+			jqCkBundle.Transforms.Add(jsTransformer);
+			jqCkBundle.Orderer = nullOrderer;
+			bundles.Add(jqCkBundle);
+
+			var jqTsBundle = new CustomScriptBundle("~/site/jqToaster");
+			jqTsBundle.Include("~/content/js/jq/toaster/jquery.toaster.js");
+			jqTsBundle.Transforms.Add(jsTransformer);
+			jqTsBundle.Orderer = nullOrderer;
+			bundles.Add(jqTsBundle);
+
+			var jqFancyTreeBundle = new CustomScriptBundle("~/site/jqFancyTree");
+			jqFancyTreeBundle.Include("~/content/js/jq/fancytree/jquery.fancytree.js",
+				"~/content/js/jq/fancytree/jquery.fancytree.glyph.js");
+			jqFancyTreeBundle.Transforms.Add(jsTransformer);
+			jqFancyTreeBundle.Orderer = nullOrderer;
+			bundles.Add(jqFancyTreeBundle);
 		}
 	}
 }
