@@ -6,6 +6,7 @@ using BundleTransformer.Core.Transformers;
 using BundleTransformer.Core.Translators;
 using BundleTransformer.Csso.Minifiers;
 using BundleTransformer.Less.Translators;
+using BundleTransformer.SassAndScss.Translators;
 
 namespace Legacy.WebClientMVC
 {
@@ -19,11 +20,28 @@ namespace Legacy.WebClientMVC
 			var nullOrderer = new NullOrderer();
 			var nullBuilder = new NullBuilder();
 
-			var styleTransformer = new StyleTransformer(new KryzhanovskyCssMinifier(), new ITranslator[] {new LessTranslator()})
+			var styleTransformer = new StyleTransformer(new KryzhanovskyCssMinifier(), new ITranslator[] {new LessTranslator() })
 			{
 				CombineFilesBeforeMinification = true,
 				UsePreMinifiedFiles = true
 			};
+
+			var styleSassTransformer = new StyleTransformer(new KryzhanovskyCssMinifier(), new ITranslator[] { new SassAndScssTranslator() })
+			{
+				CombineFilesBeforeMinification = true,
+				UsePreMinifiedFiles = true
+			};
+
+			#region UnitGridSystem
+
+			var styleUgsBundle = new CustomStyleBundle("~/unitgs/style");
+			styleUgsBundle.Include("~/content/css/styleUgs.scss");
+			styleUgsBundle.Transforms.Add(styleSassTransformer);
+			styleUgsBundle.Builder = nullBuilder;
+			styleUgsBundle.Orderer = nullOrderer;
+			bundles.Add(styleUgsBundle);
+
+			#endregion
 
 			var styleBundle = new CustomStyleBundle("~/site/style");
 			styleBundle.Include("~/content/css/site.less");
@@ -53,6 +71,10 @@ namespace Legacy.WebClientMVC
 			sFancyTree.Builder = nullBuilder;
 			sFancyTree.Orderer = nullOrderer;
 			bundles.Add(sFancyTree);
+
+
+
+
 
 			var jqBundle = new CustomScriptBundle("~/site/jq");
 			jqBundle.Include("~/content/js/jq/jquery-{version}.js");

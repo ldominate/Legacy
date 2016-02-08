@@ -1,0 +1,32 @@
+﻿@import "UnitGS/_UnitGS.scss";
+
+$grid-debug: true;
+@if $grid-debug { body { color: #333;}}
+
+@include unitgs-set-grid-settings(
+    $number-of-columns: 25,
+    $number-of-active-columns: 24,
+    $font-size: 1,
+    $line-height: 1.5,
+    $gutter-width: 1
+    );
+
+@include unitgs-init-grid();
+
+header { @include grid-unit($font-size: 1.5, $margin-top: 1, $margin-bottom: 1); }
+nav { @include grid-unit(); }
+#sectionA { @include grid-unit($margin-bottom: 1); }
+#sectionB { @include grid-unit(); }
+footer { @include grid-unit(); }
+
+@media screen and (min-width: 30em)
+{
+    #sectionA { @include grid-unit(1/2); }
+    #sectionB { @include grid-unit(1/2, last); }
+}
+
+/*@media screen and (min-width: 60em)
+{
+    header { @include grid-unit(1/3); }
+    nav { @include grid-unit(2/3, last); }
+}*/
